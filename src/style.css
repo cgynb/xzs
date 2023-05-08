@@ -1,0 +1,3 @@
+.arco-layout-has-sider > .arco-layout, .arco-layout-has-sider > .arco-layout-content {
+    overflow-x: inherit;
+}
