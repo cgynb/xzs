@@ -8,4 +8,11 @@ export const useCommonStore = defineStore('common', {
             role: null
         };
     }
-})
+}, {
+    persist: {
+        enabled: true,
+        strategies: [{
+            storage: localStorage
+        }],
+    }
+});

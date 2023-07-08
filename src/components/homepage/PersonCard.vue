@@ -199,13 +199,22 @@ const handleBeforeOk = (done) => {
             loginByPwd(passwordLoginForm.username, passwordLoginForm.password)
                 .then((res) => {
                     console.log(res);
-                    getInfo()
-                        .then((res) => {
-                            store.user = res.data;
-                        })
-                        .catch((err) => {
-                            Message.error("登录失败，请重新尝试");
-                        });
+                    if(res.code === 200){
+                        getInfo()
+                            .then((res) => {
+                                if(res.code === 200){
+                                    Message.success("登陆成功");
+                                    store.user = res.data;
+                                }else{
+                                    Message.error(res.msg);
+                                }
+                            })
+                            .catch((err) => {
+                                Message.error("登录失败，请重新尝试");
+                            });
+                    }else{
+                        Message.error(res.msg)
+                    }
                 })
                 .catch((err) => {
                     Message.error("登录失败，请重新尝试");
