@@ -5,7 +5,7 @@
     :rowGap="16"
   >
     <a-grid-item v-for="(item, k) in guess_you_like_list" :key="k">
-      <router-link :to="{ path: '/goods/' + item.game_id }">
+      <router-link :to="{ path: '/goods/' + item.commodityId }">
         <a-card>
           <template #cover>
             <div
@@ -15,15 +15,15 @@
               }"
             >
               <img
-                :style="{ width: '100%' }"
+                :style="{ height: '100%' }"
                 alt="dessert"
-                :src="item.game_image"
+                :src="item.pictureUrl"
               />
             </div>
           </template>
           <a-card-meta
-            :title="item.game_name"
-            :description="item.game_description"
+            :title="item.title"
+            :description="`${item.price}￥`"
           >
             <template #avatar>
               <div
@@ -34,9 +34,9 @@
                 }"
               >
                 <a-avatar :size="24" :style="{ marginRight: '8px' }">
-                  <img alt="avatar" :src="item.avatar" />
+                  <img alt="avatar" :src="item.seller.pictureUrl" />
                 </a-avatar>
-                <a-typography-text>Username</a-typography-text>
+                <a-typography-text>{{ item.seller.username }}</a-typography-text>
               </div>
             </template>
           </a-card-meta>
@@ -56,107 +56,116 @@
 }
 </style>
 <script setup>
-import { reactive, onBeforeUnmount } from "vue";
+import { ref, reactive, onBeforeUnmount } from "vue";
 import { preventShake } from "@/common/control";
-const guess_you_like_list = reactive([
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jlj234ljf",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl7423j",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-  },
-]);
+import { getCommodityList } from '@/api/public';
+import { useCommonStore } from "../../store/common";
 
+const store = useCommonStore();
+// const guess_you_like_list = reactive([
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jlj234ljf",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+// ]);
+const guess_you_like_list = reactive([]);
+const page = ref(0);
 const addItems = () => {
   if (
     window.screen.height + document.documentElement.scrollTop >=
     document.documentElement.scrollHeight
   ) {
-    for (let i = 0; i < 8; i++) {
-      guess_you_like_list.push({
-        username: "username",
-        avatar:
-          "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-        game_id: "jlj234ljf",
-        game_name: "game_name",
-        game_description: "game_description",
-        game_image:
-          "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-      });
+    if(store.user != null){
+        getCommodityList(page.value)
+            .then(res => {
+                let commodityList = res.data.commodityList;
+                for (let item of commodityList) {
+                    guess_you_like_list.push(item);
+                }
+                if(res.data.commodityList.length == 0){
+                    page.value = 0;
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+        page.value += 1;
     }
   }
 };

@@ -9,7 +9,7 @@ C:.
 │   README.md
 │   tree.txt
 │   vite.config.js
-|
+│        
 ├───public
 │       logo.png
 │       
@@ -18,21 +18,35 @@ C:.
     │   main.js
     │   style.css
     │   
+    ├───api
+    │       admin.js
+    │       basic.js
+    │       buyer.js
+    │       config.js
+    │       public.js
+    │       seller.js
+    │       
     ├───assets
     │       tn.jpg
     │       vue.svg
     │       
     ├───common
     │       control.js
-    │       hook.js
-    │       request.js
+    │       status_code.js
     │       
     ├───components
     │   │   Body.vue
     │   │   Header.vue
     │   │   
+    │   ├───admin
+    │   │       Admin.vue
+    │   │       
     │   ├───buy
     │   │       Buy.vue
+    │   │       
+    │   ├───chat
+    │   │       Chat.vue
+    │   │       ChatCenter.vue
     │   │       
     │   ├───error
     │   │       Error.vue
@@ -52,6 +66,12 @@ C:.
     │   │       Sell.vue
     │   │       
     │   └───userpage
+    │           Balance.vue
+    │           BuyerOrder.vue
+    │           Favorite.vue
+    │           Info.vue
+    │           Release.vue
+    │           SellerOrder.vue
     │           UserPage.vue
     │           
     ├───router
@@ -61,5 +81,4 @@ C:.
             common.js
             runtime.js
             
-
 ```

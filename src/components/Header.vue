@@ -2,8 +2,8 @@
   <div class="header">
     <a-space direction="vertical" size="large">
       <a-row>
-        <a-col :span="4" :offset="4" :size="'large'">咸猪手</a-col>
-        <a-col :span="12">
+        <a-col :span="4" :offset="4" :size="'large'">闲猪手</a-col>
+        <a-col :span="10">
           <a-row>
             <a-input-search
               placeholder="请输入游戏和商品名称"

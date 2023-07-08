@@ -1,198 +1,189 @@
 <template>
-  <h1>keyword:{{ keyword }}</h1>
-  <a-grid
-    :cols="{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }"
-    :colGap="12"
-    :rowGap="16"
-  >
-    <a-grid-item v-for="(item, k) in good_list" :key="k">
-      <router-link :to="{ path: '/goods/' + item.game_id }">
-        <a-card>
-          <template #cover>
-            <div
-              :style="{
-                height: '250px',
-                overflow: 'auto',
-              }"
-            >
-              <img
-                :style="{ width: '100%' }"
-                alt="dessert"
-                :src="item.game_image"
-              />
-            </div>
-          </template>
-          <a-card-meta
-            :title="item.game_name"
-            :description="item.game_description"
-          >
-            <template #avatar>
-              <div
-                :style="{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: '#1D2129',
-                }"
-              >
-                <a-avatar :size="24" :style="{ marginRight: '8px' }">
-                  <img alt="avatar" :src="item.avatar" />
-                </a-avatar>
-                <a-typography-text>Username</a-typography-text>
-              </div>
-            </template>
-          </a-card-meta>
-        </a-card>
-      </router-link>
-    </a-grid-item>
-  </a-grid>
-  <div class="load">
-    <a-spin dot />
-  </div>
+    <a-grid :cols="{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4, xxl: 4 }" :colGap="12" :rowGap="16">
+        <a-grid-item v-for="(item, k) in guess_you_like_list" :key="k">
+            <router-link :to="{ path: '/goods/' + item.commodityId }">
+                <a-card>
+                    <template #cover>
+                        <div :style="{
+                            height: '250px',
+                            overflow: 'auto',
+                        }">
+                            <img :style="{ height: '100%' }" alt="dessert" :src="item.pictureUrl" />
+                        </div>
+                    </template>
+                    <a-card-meta :title="item.title" :description="`${item.price}￥`">
+                        <template #avatar>
+                            <div :style="{
+                                display: 'flex',
+                                alignItems: 'center',
+                                color: '#1D2129',
+                            }">
+                                <a-avatar :size="24" :style="{ marginRight: '8px' }">
+                                    <img alt="avatar" :src="item.seller.pictureUrl" />
+                                </a-avatar>
+                                <a-typography-text>{{ item.seller.username }}</a-typography-text>
+                            </div>
+                        </template>
+                    </a-card-meta>
+                </a-card>
+            </router-link>
+        </a-grid-item>
+    </a-grid>
+    <div class="load" v-if="showSpin">
+        <a-spin dot />
+    </div>
 </template>
 <style scoped>
 .load {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 </style>
-  <script setup>
-import { reactive, defineProps, onBeforeUnmount } from "vue";
+<script setup>
+import { ref, reactive, onBeforeUnmount } from "vue";
+import { preventShake } from "@/common/control";
+import { searchCommodityList } from '@/api/public';
+import { useCommonStore } from "../../store/common";
+import { Message } from "@arco-design/web-vue";
 
+const showSpin = ref(true);
 const props = defineProps({
-  keyword: String,
+    keyword: String,
 });
-console.log(props.keyword);
+const store = useCommonStore();
+// const guess_you_like_list = reactive([
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jlj234ljf",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+//   {
+//     username: "username",
+//     avatar:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
+//     game_id: "jl7423j",
+//     game_name: "game_name",
+//     game_description: "game_description",
+//     game_image:
+//       "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+//   },
+// ]);
+const guess_you_like_list = reactive([]);
+const page = ref(1);
 
-const good_list = reactive([
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-  {
-    username: "username",
-    avatar:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-    game_id: "jl432",
-    game_name: "game_name",
-    game_description: "game_description",
-    game_image:
-      "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-  },
-]);
-
-const t = setInterval(() => {
-  if (window.screen.height > document.documentElement.scrollHeight) {
-    console.log("kk", document.documentElement.scrollHeight);
-    good_list.push({
-      username: "username",
-      avatar:
-        "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-      game_id: "jljfds",
-      game_name: "game_name",
-      game_description: "game_description",
-      game_image:
-        "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
+searchCommodityList(props.keyword, page.value)
+    .then(res => {
+        let commodityList = res.data.commodityList;
+        console.log(commodityList)
+        for (let item of commodityList) {
+            guess_you_like_list.push(item);
+        }
+        if (res.data.commodityList.length == 0) {
+            Message.info("无此商品");
+            showSpin.value = false;
+        }
+    })
+    .catch(err => {
+        console.log(err)
     });
-  } else {
-    clearInterval(t);
-  }
-}, 2000);
-
-window.onscroll = () => {
-  //   console.log(
-  //     window.screen.height,
-  //     document.documentElement.scrollTop,
-  //     document.documentElement.scrollHeight
-  //
-  setTimeout(() => {
+page.value += 1;
+const addItems = () => {
     if (
-      window.screen.height + document.documentElement.scrollTop >=
-      document.documentElement.scrollHeight
+        window.screen.height + document.documentElement.scrollTop >=
+        document.documentElement.scrollHeight
     ) {
-      //   alert("at bottom");
-      for (let i = 0; i < 8; i++) {
-        good_list.push({
-          username: "username",
-          avatar:
-            "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp",
-          game_id: "jljfds",
-          game_name: "game_name",
-          game_description: "game_description",
-          game_image:
-            "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp",
-        });
-      }
+        if (store.user != null) {
+            searchCommodityList(props.keyword, page.value)
+                .then(res => {
+                    let commodityList = res.data.commodityList;
+                    for (let item of commodityList) {
+                        guess_you_like_list.push(item);
+                    }
+                    if (res.data.commodityList.length == 0) {
+                        page.value = 0;
+                    }
+                    if (res.data.commodityList.length == 0) {
+                        Message.info("到底啦");
+                        showSpin.value = false;
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+            page.value += 1;
+        }
     }
-  }, 3000);
 };
+window.onscroll = preventShake(addItems, 1000);
+
 onBeforeUnmount(() => {
-  window.onscroll = undefined;
+    window.onscroll = undefined;
 });
 </script>
+    
